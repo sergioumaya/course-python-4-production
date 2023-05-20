@@ -45,6 +45,25 @@ def revenue_per_region(dp: DataProcessor) -> Dict:
     """
     ######################################## YOUR CODE HERE ##################################################
 
+    output = {}
+
+    # get generator from data_reader
+    data_reader_gen = (row for row in dp.data_reader)
+
+    # skip first row as it is the column name
+    _ = next(data_reader_gen)
+
+    # update stats as we iterate through the file
+
+    for row in data_reader_gen:
+        country = row["Country"]
+
+        if country in output.keys():
+            output[country] += float(row['TotalPrice'])
+        else:
+            output[country] = float(row['TotalPrice'])
+    
+    return output
     ######################################## YOUR CODE HERE ##################################################
 
 
@@ -78,6 +97,7 @@ def main():
                                       datetime.now().strftime("%B %d %Y %H-%M-%S"))
     make_dir(output_save_folder)
 
+    
     file_paths = [os.path.join(data_folder_path, file_name) for file_name in files]
     revenue_data = [get_sales_information(file_path)
                     for file_path in file_paths]
