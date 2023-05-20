@@ -45,7 +45,28 @@ class DB:
         Read more about datatypes in Sqlite here -> https://www.sqlite.org/datatype3.html
         """
     ######################################## YOUR CODE HERE ##################################################
+        #query = f'''
+        #DROP TABLE {self._table_name}
+        #'''
+        
+        query_create = f'''
+        CREATE TABLE IF NOT EXISTS {self._table_name} (
+            process_id TEXT NOT NULL,
+            file_name TEXT DEFAULT NULL,
+            file_path TEXT DEFAULT NULL,
+            description TEXT DEFAULT NULL,
+            start_time TEXT NOT NULL,
+            end_time TEXT DEFAULT NULL,
+            percentage REAL DEFAULT NULL
+        );
+        '''
 
+        #self._connection.execute(query)
+        #self._connection.commit()
+
+        self._connection.execute(query_create)
+        self._connection.commit()       
+        #self._connection.close()
     ######################################## YOUR CODE HERE ##################################################
 
     def insert(self, process_id, start_time, file_name=None, file_path=None,
@@ -63,7 +84,13 @@ class DB:
         :return: None
         """
     ######################################## YOUR CODE HERE ##################################################
-
+        insert_query = f'''
+        INSERT INTO {self._table_name} (process_id, start_time, file_name, file_path, description, end_time, percentage)
+        VALUES ('{process_id}', '{start_time}', '{file_name}', '{file_path}', '{description}', '{end_time}', '{percentage}')
+        '''
+        self._connection.execute(insert_query)
+        self._connection.commit()
+        #self._connection.close()
     ######################################## YOUR CODE HERE ##################################################
 
     def read_all(self) -> List[Dict]:
@@ -94,8 +121,16 @@ class DB:
         :param percentage: Percentage of process completed
         :return: None
         """
-    ######################################## YOUR CODE HERE ##################################################
 
+
+    ######################################## YOUR CODE HERE ##################################################
+        update_query = f'''
+        UPDATE {self._table_name} SET percentage  = '{percentage}'
+        WHERE process_id = '{process_id}'
+        '''
+        self._connection.execute(update_query)
+        self._connection.commit()
+        #self._connection.close()        
     ######################################## YOUR CODE HERE ##################################################
 
 
