@@ -164,14 +164,27 @@ def main() -> List[Dict]:
     batches = batch_files(file_paths=file_paths, n_processes=n_processes)
 
     ######################################## YOUR CODE HERE ##################################################
+    pool = multiprocessing.Pool(n_processes)
+    
+    final_batches = []
 
+    for i in batches:
+        final_batches.append((i,n_processes))
+
+    print(final_batches)
+
+    output = []
+    for i in pool.starmap(run, final_batches):
+        output.append(i)
+    #revenue_data = pool.map
+    pool.close()
     ######################################## YOUR CODE HERE ##################################################
 
     en = time.time()
     print("Overall time taken : {}".format(en-st))
 
     # should return revenue data
-    return [{}]
+    return output
 
 
 if __name__ == '__main__':
